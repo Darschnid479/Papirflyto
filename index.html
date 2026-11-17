@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d3553">
+<meta name="description" content="Lag én prisplakat med to produkter fra Papirfly-PDF. Velg A3, A4 eller A5.">
+<title>Papirfly to produkter på en | Plakatbygger</title>
+<style>
+:root{color-scheme:light;--navy:#0f3553;--navy-deep:#09283f;--blue:#1f618a;--sky:#e9f3fa;--ink:#1c2e3b;--muted:#617584;--border:#dce5ed;--surface:#fff;--bg:#f3f6f9;--shadow:0 12px 38px rgba(13,49,76,.07);--radius:16px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button,input,select{font:inherit}
+a{color:var(--blue)}
+.topbar{background:var(--navy-deep);color:#fff;border-bottom:1px solid #21465e}
+.bar-inner{max-width:1280px;margin:auto;min-height:72px;padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.identity{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;font-weight:750;letter-spacing:-.3px;font-size:17px}
+.brand-mark{height:39px;width:39px;border-radius:12px;background:#fff;display:grid;place-items:center;color:var(--navy-deep);font-size:22px;font-weight:850;box-shadow:inset 0 -5px 0 #d8e6f1}
+.brand-sub{color:#b5d2e3;font-size:12px;letter-spacing:.035em;font-weight:600;text-transform:uppercase}
+.secure-note{display:flex;align-items:center;gap:7px;color:#c6dbe9;font-size:12px;text-align:right}
+.secure-dot{width:7px;height:7px;display:inline-block;border-radius:99px;background:#7bd8a6}
+main{max-width:1280px;margin:0 auto;padding:30px 28px 55px}
+.hero{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:24px}
+.eyebrow{font-size:12px;color:var(--blue);font-weight:750;letter-spacing:.11em;text-transform:uppercase}
+h1{font-size:clamp(28px,3vw,40px);line-height:1.14;letter-spacing:-1.4px;margin:6px 0 11px;color:var(--navy-deep)}
+.lede{font-size:15px;color:var(--muted);margin:0;max-width:670px}
+.hero-steps{display:flex;align-items:center;gap:11px;padding:11px 15px;background:#e7eef4;border:1px solid #d9e5ef;border-radius:100px;font-size:12px;color:#47667b;white-space:nowrap}
+.hero-steps b{font-size:12px;color:var(--navy);font-weight:700}
+.dot-sep{color:#9fb4c3}
+.workspace{display:grid;grid-template-columns:minmax(350px,460px) minmax(450px,1fr);gap:22px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.editor{padding:24px}
+.section-top{display:flex;align-items:start;gap:13px;margin-bottom:18px}
+.number{display:grid;place-items:center;flex:none;width:31px;height:31px;border-radius:10px;background:var(--sky);color:var(--navy);font-weight:800}
+h2{font-size:19px;line-height:1.25;letter-spacing:-.4px;margin:2px 0 4px;color:#113b57}
+.section-help{font-size:13px;color:var(--muted);margin:0}
+.field-label{display:block;font-size:13px;font-weight:730;color:#244358;margin:0 0 7px}
+.field-desc{font-size:12px;color:var(--muted);margin:7px 0 0}
+.field-group{margin-bottom:17px}
+input[type=text],select{width:100%;min-width:0;padding:12px 13px;border-radius:10px;border:1px solid #cddae4;background:#fff;color:#173c54;outline:none;transition:border-color .15s,box-shadow .15s}
+input[type=text]:focus,select:focus{border-color:#398ac0;box-shadow:0 0 0 3px #cfe9f7}
+#dropzone{position:relative;padding:25px 16px 20px;border:2px dashed #bbcedc;border-radius:13px;background:#f7fbfe;text-align:center;transition:background .2s,border-color .2s;margin-bottom:20px}
+#dropzone.drag{background:#e6f5ff;border-color:#2287c0}
+.upload-icon{width:45px;height:45px;margin:0 auto 11px;display:grid;place-items:center;border-radius:13px;background:#e6f0f7;color:var(--navy)}
+.upload-title{font-weight:780;color:#133e5e;font-size:15px}
+.upload-help{font-size:12px;color:var(--muted);margin:3px 0 13px}
+#file{display:block;max-width:100%;width:100%;font-size:12px;color:#44647b;margin:auto}
+#file::file-selector-button{border:1px solid #b4cbdc;background:white;padding:8px 10px;color:#184c71;font-weight:750;border-radius:9px;cursor:pointer;margin-right:10px}
+#fileinfo{font-size:12px;overflow-wrap:anywhere;color:#16754d;font-weight:650;margin-top:12px;min-height:0}
+.two-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+input[type=checkbox]{accent-color:#0f5b85;width:16px;height:16px;margin:0;flex:none}
+.settings{border:1px solid #d8e5ed;border-radius:12px;background:#fbfdff;overflow:hidden;margin-top:2px}
+.settings summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;font-weight:750;color:#1c506e;list-style:none}
+.settings summary::-webkit-details-marker{display:none}
+.settings summary::after{content:'+';display:grid;place-items:center;border-radius:7px;width:24px;height:24px;background:#e8f0f5;color:var(--navy);font-size:20px;font-weight:450}
+.settings[open] summary::after{content:'−'}
+.settings-body{border-top:1px solid #e3edf4;padding:0 16px 18px}
+.settings-body > p{font-size:12px;color:var(--muted);margin:13px 0}
+fieldset{border:0;padding:0;margin:17px 0 0;min-width:0}
+legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.settings-grid label{display:flex;align-items:center;gap:8px;font-size:12px;color:#39566a;cursor:pointer;line-height:1.35;min-height:30px}
+.setting-row{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:9px;flex-wrap:wrap}
+.setting-row label{font-size:12px;font-weight:680;color:#385366}
+.setting-row select{width:145px;font-size:12px;padding:7px}
+.setting-row input[type=range]{accent-color:var(--blue);max-width:145px}
+#priceXValue{font-size:11px;color:var(--muted);min-width:95px;text-align:right}
+#optionsNote{font-size:12px;color:var(--muted);margin-top:12px}
+#resetSettings{border:1px solid #cfdee9;background:white;color:#245272;border-radius:8px;padding:8px 11px;font-weight:700;cursor:pointer;font-size:12px;margin-top:12px}
+.generate-area{border-top:1px solid #e3ebf0;margin-top:21px;padding-top:19px}
+#generate{display:flex;align-items:center;justify-content:center;width:100%;border:0;background:var(--navy);color:white;border-radius:11px;font-weight:800;padding:14px;cursor:pointer;min-height:49px;transition:background .15s,transform .15s}
+#generate:hover:enabled{background:#15547c;transform:translateY(-1px)}
+#generate:disabled{cursor:not-allowed;opacity:.46;transform:none}
+#status{font-size:12px;color:var(--muted);margin-top:12px;min-height:20px}
+#status.good{color:#0a754c}#status.error{color:#ab3534}
+.preview-card{overflow:hidden;position:sticky;top:20px}
+.preview-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--border)}
+.preview-head h2{font-size:18px;margin:0}
+#pagebadge{border-radius:30px;padding:5px 10px;background:#e9f3f9;color:#255c7b;font-size:11px;font-weight:750;min-height:0}
+.preview-body{padding:20px;background:#eff3f6}
+#empty{min-height:630px;border:1px dashed #c3d4df;border-radius:12px;background:linear-gradient(140deg,#fff,#f7fafd);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;color:#526f80}
+.empty-graphic{display:flex;align-items:center;justify-content:center;gap:0;margin:0 auto 20px}
+.sheet{width:87px;height:125px;background:white;border:1px solid #ccdae4;box-shadow:0 9px 18px #12375514;border-radius:5px;transform:rotate(-9deg);padding:11px 9px}
+.sheet:last-child{transform:translateX(-18px) rotate(7deg)}
+.sheet::before{content:'';display:block;height:21px;background:#174967;border-radius:2px;margin-bottom:12px}
+.sheet i{display:block;background:#dbe7ed;width:80%;height:5px;margin:6px 0}
+.sheet i:last-child{width:55%}
+#empty b{font-size:17px;color:#284e66}#empty p{max-width:280px;line-height:1.6;font-size:13px;margin:7px 0 0}
+#preview{display:none;border:0;width:100%;height:min(76vh,890px);min-height:560px;background:white;border-radius:8px}
+#result{display:none;gap:13px;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding:17px 21px;flex-wrap:wrap}
+#resulttext{font-size:12px;color:var(--muted);font-weight:650}
+#download{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#17734f;color:white;border-radius:9px;padding:11px 17px;font-weight:800;font-size:13px}
+#download:hover{background:#0e5f40}
+.footnote{font-size:12px;color:var(--muted);line-height:1.7;margin:18px 3px 0}
+.site-foot{max-width:1280px;margin:0 auto;padding:0 28px 24px;font-size:11px;color:#7c8b96;display:flex;justify-content:space-between;gap:12px}
+@media(max-width:1030px){.workspace{grid-template-columns:1fr}.preview-card{position:static}.hero-steps{display:none}#empty{min-height:390px}main{max-width:780px}}
+@media(max-width:520px){.bar-inner{padding:12px 16px}.brand-sub{display:none}.secure-note{font-size:10px}.identity{font-size:14px}.brand-mark{width:33px;height:33px;font-size:17px;border-radius:9px}main{padding:23px 12px 42px}.editor{padding:18px}.hero{padding:0 4px}.two-fields{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr}.preview-head{padding:16px}.preview-body{padding:12px}.site-foot{padding:0 16px 20px;flex-direction:column;gap:2px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="bar-inner">
+  <a class="identity" href="./" aria-label="Papirfly to produkter på en"><span class="brand-mark">P</span><span>Papirfly <span style="color:#93c7e7">to produkter på en</span></span></a>
+  <div class="secure-note"><span class="secure-dot" aria-hidden="true"></span> PDF-ene behandles lokalt i nettleseren</div>
+</div></header>
+<main>
+  <div class="hero"><div><div class="eyebrow">ENKLERE PRISPLAKATER</div><h1>Fra to sider til én plakat.</h1><p class="lede">Last opp en PDF fra Papirfly, velg størrelse og få to produkter pent plassert under hverandre. Behold alt som det er, eller tilpass detaljer etter behov.</p></div>
+    <div class="hero-steps"><b>01 Last opp</b><span class="dot-sep">•</span><b>02 Tilpass</b><span class="dot-sep">•</span><b>03 Last ned</b></div>
+  </div>
+  <div class="workspace">
+    <section class="card editor" aria-labelledby="editorTitle">
+      <div class="section-top"><span class="number">1</span><div><h2 id="editorTitle">Lag prisplakat</h2><p class="section-help">Du er bare noen få valg unna en utskriftsklar PDF.</p></div></div>
+      <div id="dropzone" tabindex="0" role="group" aria-label="Last opp PDF">
+        <div class="upload-icon" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V3m0 0L7.5 7.5M12 3l4.5 4.5"/><path d="M4 15v4.5A1.5 1.5 0 0 0 5.5 21h13A1.5 1.5 0 0 0 20 19.5V15"/></svg></div>
+        <div class="upload-title">Last opp PDF med produkter</div>
+        <div class="upload-help">Dra filen hit, eller velg en PDF fra maskinen.</div>
+        <input id="file" type="file" accept="application/pdf,.pdf" aria-label="Velg PDF-fil"><div id="fileinfo" aria-live="polite"></div>
+      </div>
+      <div class="field-group"><label class="field-label" for="heading">Topptekst på plakaten</label><input id="heading" type="text" maxlength="75" value="PRISPLAKAT"></div>
+      <div class="two-fields">
+        <div class="field-group"><label class="field-label" for="paper">Papirstørrelse</label><select id="paper"><option value="A3">A3 – Stor plakat</option><option value="A4">A4 – Vanlig ark</option><option value="A5">A5 – Kompakt</option></select></div>
+        <div class="field-group"><label class="field-label" for="mode">PDF-type</label><select id="mode"><option value="papirfly">Maxbo / Papirfly</option><option value="whole">Annen PDF</option></select></div>
+      </div>
+      <p id="modehint" class="field-desc" style="margin:-5px 0 17px">For vanlige Papirfly A4-produktplakater. A5 tegner spesifikasjonene med større skrift når PDF-en inneholder lesbar tekst.</p>
+      <details id="settings" class="settings">
+        <summary><span>Innstillinger <span style="font-weight:450;color:#718999">(valgfritt)</span></span></summary>
+        <div class="settings-body">
+          <p>Alle valgene har standardoppsett. Du trenger ikke endre noe for å lage plakaten.</p>
+          <fieldset><legend>Vis på prislappen</legend><div class="settings-grid">
+            <label><input type="checkbox" id="showCategory" checked> Produktkategori (f.eks. HANSKE)</label>
+            <label><input type="checkbox" id="showBrand" checked> Produsentlogo / merke</label>
+            <label><input type="checkbox" id="showName" checked> Produktnavn</label>
+            <label><input type="checkbox" id="showSpecs" checked> Spesifikasjoner</label>
+            <label><input type="checkbox" id="showPhoto" checked> Produktbilde</label>
+            <label><input type="checkbox" id="showUnit" checked> Prisenhet (f.eks. Pr. par)</label>
+            <label><input type="checkbox" id="showBarcode" checked> Strekkode</label>
+            <label><input type="checkbox" id="showItemNumber" checked> Varenummer</label>
+            <label><input type="checkbox" id="showMaxbo" checked> MAXBO-logo nederst</label>
+            <label><input type="checkbox" id="showDivider" checked> Skillelinjer mellom varene</label>
+          </div></fieldset>
+          <fieldset><legend>Finjustering</legend>
+            <div class="setting-row"><label for="priceX">Prisplassering</label><input type="range" id="priceX" min="-25" max="60" step="5" value="0"><output id="priceXValue">Standard</output></div>
+            <div class="setting-row"><label for="a5SpecScale">A5 spesifikasjonstekst</label><select id="a5SpecScale"><option value="1">Standard</option><option value="1.15">Litt større</option><option value="1.3">Større</option></select></div>
+          </fieldset>
+          <button type="button" id="resetSettings">Tilbakestill innstillinger</button>
+          <p id="optionsNote">Innstillingene gjelder Maxbo / Papirfly-modus. Kontroller priser og strekkoder før utskrift.</p>
+        </div>
+      </details>
+      <div class="generate-area"><button id="generate" disabled><span id="btntext">Lag PDF-plakat</span></button><div id="status" role="status" aria-live="polite">Velg en PDF-fil for å starte.</div></div>
+    </section>
+    <section class="card preview-card" aria-label="Forhåndsvisning av prisplakaten">
+      <div class="preview-head"><h2>Forhåndsvisning</h2><span id="pagebadge" aria-live="polite">Venter på PDF</span></div>
+      <div class="preview-body"><div id="empty"><div class="empty-graphic" aria-hidden="true"><div class="sheet"><i></i><i></i><i></i></div><div class="sheet"><i></i><i></i><i></i></div></div><b>Plakaten din vises her</b><p>Velg en PDF-fil og trykk «Lag PDF-plakat» for å se resultatet før utskrift.</p></div><iframe id="preview" title="Forhåndsvisning av generert PDF"></iframe></div>
+      <div id="result"><span id="resulttext"></span><a id="download" download="Prisplakat.pdf">Last ned PDF</a></div>
+    </section>
+  </div>
+  <p class="footnote">Verktøyet behandler PDF-filene lokalt i nettleseren. Ingen fil lastes opp til en server. Internett er nødvendig for å laste PDF-bibliotekene. Sjekk priser, produsentlogoer og strekkoder før utskrift.</p>
+</main>
+<footer class="site-foot"><span>Papirfly to produkter på en • Et uavhengig hjelpeverktøy</span><span>Ikke en offisiell Papirfly- eller MAXBO-tjeneste.</span></footer>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const fileInput=$('file'), drop=$('dropzone'), heading=$('heading'), mode=$('mode'), paper=$('paper');
+    const generate=$('generate'), status=$('status'), pagebadge=$('pagebadge');
+    const toggles=['showCategory','showBrand','showName','showSpecs','showPhoto','showUnit','showBarcode','showItemNumber','showMaxbo','showDivider'];
+    const enabled=id=>$(id).checked;
+    const priceOffset=()=>Number($('priceX').value)||0;
+    $('priceX').addEventListener('input',()=>{$('priceXValue').textContent=priceOffset()===0?'Standard':(priceOffset()>0?'+':'')+priceOffset()+' pt mot høyre';});
+    $('resetSettings').addEventListener('click',()=>{
+      toggles.forEach(id=>$(id).checked=true);
+      $('priceX').value='0'; $('a5SpecScale').value='1'; $('priceXValue').textContent='Standard';
+    });
+
+    let selectedFile=null, downloadUrl=null, busy=false;
+    const W=841.89, H=1190.55; // Intern A3-designflate (PDF-punkter)
+    const PAPER={A3:[841.89,1190.55],A4:[595.28,841.89],A5:[419.53,595.28]};
+    function textBoost(){return paper.value==='A5'?1.7:paper.value==='A4'?1.1:1;}
+
+    function message(text,type='') { status.className='status '+type; status.textContent=text; }
+    function fileChosen(file) {
+      if (!file) return;
+      if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') { message('Velg en PDF-fil (.pdf).','error');return; }
+      selectedFile=file; generate.disabled=false;
+      $('fileinfo').classList.add('show');
+      $('fileinfo').textContent='✓ '+file.name+' · '+(file.size/1048576).toFixed(1)+' MB';
+      message('PDF valgt. Velg papirstørrelse og lag plakaten.');
+    }
+    fileInput.addEventListener('change',()=>fileChosen(fileInput.files?.[0]));
+    for (const event of ['dragenter','dragover']) drop.addEventListener(event,e=>{e.preventDefault();drop.classList.add('drag');});
+    for (const event of ['dragleave','drop']) drop.addEventListener(event,e=>{e.preventDefault();drop.classList.remove('drag');});
+    drop.addEventListener('drop',e=>fileChosen([...e.dataTransfer.files].find(f => /\.pdf$/i.test(f.name))));
+    drop.addEventListener('keydown',e=>{if(e.target===drop&&(e.key==='Enter'||e.key===' ')){e.preventDefault();fileInput.click();}});
+    mode.addEventListener('change',()=>{$('modehint').textContent=mode.value==='papirfly'?'Henter bilder, produktinformasjon, pris og strekkode fra de vanlige Papirfly-områdene. Best for A4 Standard-plakater.':'Bruker hele hver PDF-side, skalert til én av de to rekkene. Fungerer for flere typer PDF, men teksten kan bli mindre.';});
+    function rgbHex(hex) { return PDFLib.rgb(parseInt(hex.substring(1,3),16)/255,parseInt(hex.substring(3,5),16)/255,parseInt(hex.substring(5,7),16)/255); }
+    function rect(page,x,top,width,height,color) {page.drawRectangle({x,y:H-top-height,width,height,color});}
+    function line(page,x,top,len,color,thickness=1){rect(page,x,top,len,thickness,color);}
+    function fitText(page,text,font,top,maxsize,minsize,maxwidth,color){
+      const content=(text||'PRISPLAKAT').trim().toUpperCase();let size=maxsize;
+      while(size>minsize&&font.widthOfTextAtSize(content,size)>maxwidth)size-=1;
+      const width=font.widthOfTextAtSize(content,size);
+      page.drawText(content,{x:Math.max(24,(W-width)/2),y:H-top-size,size,font,color});
+    }
+    async function headingForPage(pdfjsDoc,index){
+      if(!pdfjsDoc) return 'PRODUKT '+(index+1);
+      try {
+        const p=await pdfjsDoc.getPage(index+1);
+        const vp=p.getViewport({scale:1}), list=(await p.getTextContent()).items;
+        const tops=list.map(v=>({str:(v.str||'').trim(),y:vp.height-v.transform[5],x:v.transform[4],size:Math.abs(v.transform[0])||0}));
+        const titles=tops.filter(v=>v.str&&v.y<vp.height*.165&&v.size>vp.height*.027);
+        titles.sort((a,b)=>b.size-a.size||a.y-b.y);
+        if(titles.length){
+          const first=titles[0];
+          return tops.filter(v=>v.str&&Math.abs(v.y-first.y)<Math.max(8,first.size*.33)).sort((a,b)=>a.x-b.x).map(v=>v.str).join(' ').slice(0,50).toUpperCase();
+        }
+      }catch(e){console.warn('Tittel kunne ikke leses fra side',index+1,e);}
+      return 'PRODUKT '+(index+1);
+    }
+    async function itemNumberForPage(pdfjsDoc,index){
+      if(!pdfjsDoc)return '';
+      try{
+        const p=await pdfjsDoc.getPage(index+1),vp=p.getViewport({scale:1}),list=(await p.getTextContent()).items;
+        const candidates=list.map(i=>({v:(i.str||'').trim(),y:vp.height-i.transform[5],x:i.transform[4]})).filter(i=>i.y>vp.height*.9 && /^\d{5,9}$/.test(i.v));
+        candidates.sort((a,b)=>Math.abs(a.x-vp.width*.46)-Math.abs(b.x-vp.width*.46));return candidates[0]?.v||'';
+      } catch(e){return '';}
+    }
+    // Rasteriserer hver originalside EN gang, og klipper ut faktiske piksler.
+    // Dette unngaar de uoenskede strekene/tekstfragmentene fra PDF-vektorer
+    // som ble tegnet utenfor kildeutsnittet ved embedPage().
+    let rasterDoc=null, rasterSourcePages=[], rasterCache=new Map();
+    async function getRaster(sourcePage){
+      const index=rasterSourcePages.indexOf(sourcePage);
+      if(index<0 || !rasterDoc)throw new Error('Kan ikke lese PDF-side for utsnitt.');
+      if(rasterCache.has(index))return rasterCache.get(index);
+      const page=await rasterDoc.getPage(index+1);
+      const scale=4; // ca. 384 DPI fra A4: bevarer lesbarheten i liten skrift og strekkoder
+      const viewport=page.getViewport({scale});
+      const canvas=document.createElement('canvas');
+      canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+      const context=canvas.getContext('2d',{alpha:false});
+      context.fillStyle='#ffffff';context.fillRect(0,0,canvas.width,canvas.height);
+      await page.render({canvasContext:context,viewport,background:'#ffffff'}).promise;
+      const result={canvas,width:canvas.width,height:canvas.height};
+      rasterCache.set(index,result);
+      return result;
+    }
+    async function cropTo(sourcePage,outputDoc,outputPage,clip,target,fit='contain',align='center') {
+      const src=await getRaster(sourcePage);
+      const x0=Math.max(0,Math.min(src.width,Math.floor(src.width*clip[0])));
+      const y0=Math.max(0,Math.min(src.height,Math.floor(src.height*clip[1])));
+      const x1=Math.max(0,Math.min(src.width,Math.ceil(src.width*clip[2])));
+      const y1=Math.max(0,Math.min(src.height,Math.ceil(src.height*clip[3])));
+      if(x1<=x0||y1<=y0)return;
+      const piece=document.createElement('canvas');piece.width=x1-x0;piece.height=y1-y0;
+      const ctx=piece.getContext('2d',{alpha:false});
+      ctx.fillStyle='#ffffff';ctx.fillRect(0,0,piece.width,piece.height);
+      ctx.drawImage(src.canvas,x0,y0,piece.width,piece.height,0,0,piece.width,piece.height);
+      const img=await outputDoc.embedPng(piece.toDataURL('image/png'));
+      // Utklippet er et ekte bilde, saa innhold UTENFOR utsnittet kan ikke lekke inn.
+      let dw,dh;
+      const ratio=fit==='cover'?Math.max(target[2]/img.width,target[3]/img.height):Math.min(target[2]/img.width,target[3]/img.height);
+      dw=img.width*ratio;dh=img.height*ratio;
+      const x=target[0]+(align==='left'?0:(target[2]-dw)/2), ytop=target[1]+(target[3]-dh)/2;
+      outputPage.drawImage(img,{x,y:H-ytop-dh,width:dw,height:dh});
+      piece.width=0;piece.height=0;
+    }
+    // A5: hent spesifikasjonene som ekte tekst, i stedet for aa krympe original-PDF-en.
+    async function detailsForA5(pdfjsDoc,index){
+      if(!pdfjsDoc)return null;
+      try{
+        const src=await pdfjsDoc.getPage(index+1),v=src.getViewport({scale:1});
+        const items=(await src.getTextContent()).items.map(i=>({
+          text:(i.str||'').trim(),x:i.transform[4],y:v.height-i.transform[5]
+        })).filter(i=>i.text);
+        const pick=(start,end)=>items.filter(i=>i.y>=v.height*start&&i.y<v.height*end)
+          .sort((a,b)=>a.y-b.y||a.x-b.x).map(i=>i.text);
+        // Kildens produktnavn og spesifikasjoner ligger normalt i disse sonene.
+        const names=pick(.508,.554), specs=pick(.554,.636);
+        return {name:names.join(' ').replace(/\s+/g,' ').trim(),specs:[...new Set(specs)]};
+      }catch(e){console.warn('Kunne ikke lese spesifikasjonene',e);return null;}
+    }
+    function pdfSafe(s){return s.replace(/[\u2010-\u2015]/g,'-').replace(/\u2022/g,'-').replace(/\u00a0/g,' ').replace(/[^\x20-\xff]/g,'');}
+    function drawWrapped(page,text,font,size,x,top,maxWidth,maxLines,color){
+      const words=pdfSafe(text).split(/\s+/).filter(Boolean),lines=[];let line='';
+      for(const word of words){
+        const attempt=line?line+' '+word:word;
+        if(font.widthOfTextAtSize(attempt,size)<=maxWidth){line=attempt;continue;}
+        if(line){lines.push(line);line=word;}else{lines.push(word);line='';}
+      }
+      if(line)lines.push(line);
+      lines.slice(0,maxLines).forEach((l,i)=>page.drawText(l,{x,y:H-top-i*(size+5)-size,size,font,color}));
+      return Math.min(lines.length,maxLines);
+    }
+    async function drawProduct(pdfDoc,outPage,sourcePage,index,rowTop,font,bold,pdfjsDoc){
+      const navy=rgbHex('#0e3553'),gray=rgbHex('#d2dce2'),muted=rgbHex('#6b7580');
+      const title=(await headingForPage(pdfjsDoc,index)).replace(/\s+/g,' ').slice(0,55);
+      let size=29*textBoost();while(size>16&&bold.widthOfTextAtSize(title,size)>510)size--;
+      if(enabled('showCategory'))outPage.drawText(title,{x:50,y:H-rowTop-size,size,font:bold,color:navy});
+      // A5 trenger lesbare spesifikasjoner: tegn dem paa nytt i storre skrift.
+      const a5Details=paper.value==='A5'?await detailsForA5(pdfjsDoc,index):null;
+      if(a5Details && a5Details.specs.length){
+        const name=a5Details.name||title;
+        // Behold ORIGINAL produsent-/merkevarelogo fra Papirfly (f.eks. ADAX).
+        // Denne er ikke det samme som MAXBO-logoen nederst på arket.
+        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.457,.180,.505],[50,rowTop+50,145,35]);
+        const used=enabled('showName')?drawWrapped(outPage,name,bold,24,50,rowTop+91,490,2,navy):1;
+        const specsTop=rowTop+148+(used-1)*27;
+        const maxSpecs=Math.min(5,Math.floor((rowTop+270-specsTop)/26));
+        if(enabled('showSpecs'))a5Details.specs.slice(0,maxSpecs).forEach((spec,i)=>{
+          const boost=Number($('a5SpecScale').value)||1;
+          let f=22*boost;
+          while(f>16&&font.widthOfTextAtSize(pdfSafe(spec),f)>490)f--;
+          outPage.drawText(pdfSafe(spec),{x:50,y:H-specsTop-i*26-f,size:f,font,color:navy});
+        });
+      }else{
+        // A3/A4 og PDF-er uten lesbart tekstlag: behold originaltekstblokken.
+        // Del opp originalteksten i smale, presise felt. Ikke kopier den
+        // brede sonen som inneholder dekorative symboler/streker mellom logo og navn.
+        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.457,.180,.505],[50,rowTop+50,145,35]);
+        if(enabled('showName'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.505,.875,.555],[50,rowTop+91,506,49], 'contain', 'left');
+        if(enabled('showSpecs'))await cropTo(sourcePage,pdfDoc,outPage,[.040,.553,.79,.624],[50,rowTop+143,506,80], 'contain', 'left');
+      }
+      // Produktfoto i høyre spalte.
+      if(enabled('showPhoto'))await cropTo(sourcePage,pdfDoc,outPage,[.25,.164,.75,.462],[561,rowTop+43,240,219]);
+      // Bare pris og enhetstekst ("Pr. par", "Pr. stk" osv.).
+      // Start under spesifikasjonene, ellers kan smaatekst og streker folge med.
+      if(enabled('showUnit')){
+        await cropTo(sourcePage,pdfDoc,outPage,[0,.645,.66,.895],[35+priceOffset(),rowTop+278,485,166], 'contain', 'left');
+      }else{
+        // Start lenger nede i kildeutsnittet for aa utelate enhetsetiketten.
+        await cropTo(sourcePage,pdfDoc,outPage,[0,.715,.66,.895],[35+priceOffset(),rowTop+299,485,145], 'contain', 'left');
+      }
+      // Original strekkode, beholdt som vektorgrafikk fra PDF-en.
+      // Paa A5 brukes stoerre plass og tettere utsnitt slik at strekene blir
+      // tydeligere uten at de blir uproporsjonalt strukket.
+      if(enabled('showBarcode')&&paper.value==='A5'){
+        await cropTo(sourcePage,pdfDoc,outPage,[.608,.946,.742,.998],[574,rowTop+307,220,98]);
+      }else if(enabled('showBarcode')){
+        await cropTo(sourcePage,pdfDoc,outPage,[.595,.937,.755,1],[625,rowTop+335,133,64]);
+      }
+      const itemNumber=await itemNumberForPage(pdfjsDoc,index);
+      if(itemNumber&&enabled('showItemNumber')){outPage.drawText('Varenr. '+itemNumber,{x:625,y:H-rowTop-418,size:12.5*textBoost(),font,color:muted});}
+      if(index%2===0&&enabled('showDivider')){line(outPage,45,648, W-90,gray,1.5);}
+    }
+    async function drawWholePage(pdfDoc,outPage,sourcePage,index,rowTop,font,bold){
+      const navy=rgbHex('#0e3553'),gray=rgbHex('#d2dce2');
+      outPage.drawText('PRODUKT '+(index+1),{x:50,y:H-rowTop-25,size:23*textBoost(),font:bold,color:navy});
+      const w=sourcePage.getWidth(),h=sourcePage.getHeight();
+      const maxW=750,maxH=362,scale=Math.min(maxW/w,maxH/h);
+      const dw=w*scale,dh=h*scale,x=(W-dw)/2,ytop=rowTop+40+(maxH-dh)/2;
+      const [embedded]=await pdfDoc.embedPages([sourcePage]);
+      outPage.drawPage(embedded,{x,y:H-ytop-dh,width:dw,height:dh});
+      if(index%2===0&&enabled('showDivider'))line(outPage,45,648,W-90,gray,1.5);
+    }
+    async function addSheet(pdfDoc,sourceDoc,pairOffset,font,bold,pdfjsDoc){
+      const sheet=pdfDoc.addPage([W,H]);
+      const navy=rgbHex('#0e3553'),cream=rgbHex('#ffffff'),gray=rgbHex('#d7e0e5');
+      // Felles blå Maxbo-lignende banner med buet hvit kant.
+      rect(sheet,0,0,W,188,navy);
+      sheet.drawEllipse({x:W/2,y:H-280,xScale:W*.74,yScale:120,color:cream});
+      fitText(sheet,heading.value.trim()||'PRISPLAKAT',bold,40,60*textBoost(),21,W-80,cream);
+      const count=Math.min(2,sourceDoc.getPageCount()-pairOffset);
+      for(let k=0;k<count;k++){
+        const index=pairOffset+k,sourcePage=sourceDoc.getPage(index),top=k===0?205:659;
+        if(mode.value==='papirfly')await drawProduct(pdfDoc,sheet,sourcePage,index,top,font,bold,pdfjsDoc);
+        else await drawWholePage(pdfDoc,sheet,sourcePage,index,top,font,bold);
+      }
+      // MAXBO-logoen nederst pa arket; produsentlogoen tegnes separat i produktrekken.
+      // Hent logo fra originaldokumentet, uten aa endre originalens grafikk.
+      if(mode.value==='papirfly'&&enabled('showMaxbo')){
+        const firstPage=sourceDoc.getPage(0);
+        if(paper.value==='A5'){
+          line(sheet,45,1085,W-90,gray,1);
+          await cropTo(firstPage,pdfDoc,sheet,[.765,.935,.998,.998],[610,1092,197,70]);
+        }else{
+          line(sheet,45,1130,W-90,gray,1);
+          await cropTo(firstPage,pdfDoc,sheet,[.74,.931,.995,1],[638,1134,156,49]);
+        }
+      }else{
+        line(sheet,45,1130,W-90,gray,1);
+      }
+      // Bruk samme oppsett, men skaler hele siden til valgt fysisk papirstørrelse.
+      const [pageW,pageH]=PAPER[paper.value];
+      const scale=Math.min(pageW/W,pageH/H);
+      sheet.scaleContent(scale,scale);
+      sheet.setSize(pageW,pageH);
+    }
+    async function createPdf(){
+      if(busy||!selectedFile)return;
+      busy=true;generate.disabled=true;$('btntext').textContent='Lager PDF …';
+      try{
+        if(!window.PDFLib)throw new Error('PDF-biblioteket kunne ikke lastes. Koble til internett og åpne HTML-filen på nytt.');
+        message('Leser PDF-filen …');
+        const srcData=await selectedFile.arrayBuffer();
+        const sourceDoc=await PDFLib.PDFDocument.load(srcData,{updateMetadata:false});
+        const count=sourceDoc.getPageCount();
+        if(!count)throw new Error('PDF-filen har ingen sider.');
+        const generated=await PDFLib.PDFDocument.create();
+        const font=await generated.embedFont(PDFLib.StandardFonts.Helvetica);
+        const bold=await generated.embedFont(PDFLib.StandardFonts.HelveticaBold);
+        generated.setTitle('Papirfly to produkter på en - '+heading.value.trim());
+        let pdfjsDoc=null;
+        if(mode.value==='papirfly' && !window.pdfjsLib)throw new Error('PDF.js ble ikke lastet. Sjekk internettforbindelsen.');
+        if(window.pdfjsLib && mode.value==='papirfly'){
+          try{pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            pdfjsDoc=await pdfjsLib.getDocument({data:new Uint8Array(srcData.slice(0))}).promise;
+          }catch(e){throw new Error('Kunne ikke tegne PDF-sidene: '+(e.message||e));}
+        }
+        rasterDoc=pdfjsDoc;rasterSourcePages=sourceDoc.getPages();rasterCache.clear();
+        for(let i=0;i<count;i+=2){
+          message('Setter opp '+paper.value+'-ark '+(Math.floor(i/2)+1)+' av '+Math.ceil(count/2)+' …');
+          await addSheet(generated,sourceDoc,i,font,bold,pdfjsDoc);
+          // Frigjor store mellomlagrede sider etter hvert ark.
+          rasterCache.forEach(item=>{item.canvas.width=0;item.canvas.height=0;});
+          rasterCache.clear();
+          await new Promise(r=>setTimeout(r,0));
+        }
+        if(pdfjsDoc){try{await pdfjsDoc.destroy();}catch(e){}} rasterDoc=null;
+        message('Lagrer ferdig PDF …');
+        const output=await generated.save({useObjectStreams:true});
+        if(downloadUrl)URL.revokeObjectURL(downloadUrl);
+        downloadUrl=URL.createObjectURL(new Blob([output],{type:'application/pdf'}));
+        const filename=(selectedFile.name.replace(/\.pdf$/i,'').replace(/[^a-zA-Z0-9\-_ æøåÆØÅ]/g,'').trim()||'Prisplakat')+'_'+paper.value+'.pdf';
+        $('download').href=downloadUrl;$('download').download=filename;
+        $('preview').src=downloadUrl+'#toolbar=1&navpanes=0';$('preview').style.display='block';
+        $('empty').style.display='none';$('result').style.display='flex';
+        $('resulttext').textContent=count+' produkter på '+Math.ceil(count/2)+' '+paper.value+'-ark';
+        pagebadge.textContent=Math.ceil(count/2)+' '+paper.value+'-ark';
+        message('Ferdig! Se over forhåndsvisningen og last ned PDF-en.','good');
+      }catch(e){console.error(e);message('Kunne ikke lage PDF: '+(e.message||String(e)),'error');}
+      finally{busy=false;generate.disabled=!selectedFile;$('btntext').textContent='Lag PDF-plakat';}
+    }
+    generate.addEventListener('click',createPdf);
+    window.addEventListener('beforeunload',()=>{if(downloadUrl)URL.revokeObjectURL(downloadUrl);});
+  })();
+  </script>
+</body></html>
