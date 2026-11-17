@@ -1,8 +1,8 @@
-# Papirfly to produkter på en
+# DuoTag
 
-**[ÅPNE PAPIRFLY-VERKTØYET](https://darschnid479.github.io/Papirflyto/)**
+**[ÅPNE DUOTAG](https://darschnid479.github.io/Papirflyto/)**
 
-Lag prisplakater fra Papirfly-PDF med to produkter på samme ark. Velg A3, A4 eller A5, skriv egen overskrift, og juster valgfrie innstillinger.
+DuoTag - Smart Price Poster Builder. Lag prisplakater fra Papirfly-PDF med to produkter på samme ark. Velg A3, A4 eller A5, skriv egen overskrift, og juster valgfrie innstillinger.
 
 ## Publisere nettsiden
 
