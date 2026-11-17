@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0d3553">
 <meta name="description" content="Lag én prisplakat med to produkter fra Papirfly-PDF. Velg A3, A4 eller A5.">
-<title>Papirfly to produkter på en | Plakatbygger</title>
+<title>DuoTag | Smart Price Poster Builder</title>
 <style>
 :root{color-scheme:light;--navy:#0f3553;--navy-deep:#09283f;--blue:#1f618a;--sky:#e9f3fa;--ink:#1c2e3b;--muted:#617584;--border:#dce5ed;--surface:#fff;--bg:#f3f6f9;--shadow:0 12px 38px rgba(13,49,76,.07);--radius:16px}
 *{box-sizing:border-box}
@@ -100,7 +100,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
 </head>
 <body>
 <header class="topbar"><div class="bar-inner">
-  <a class="identity" href="./" aria-label="Papirfly to produkter på en"><span class="brand-mark">P</span><span>Papirfly <span style="color:#93c7e7">to produkter på en</span></span></a>
+  <a class="identity" href="./" aria-label="DuoTag"><span class="brand-mark">D</span><span>DuoTag <span style="color:#93c7e7">Price Poster Builder</span></span></a>
   <div class="secure-note"><span class="secure-dot" aria-hidden="true"></span> PDF-ene behandles lokalt i nettleseren</div>
 </div></header>
 <main>
@@ -156,7 +156,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
   </div>
   <p class="footnote">Verktøyet behandler PDF-filene lokalt i nettleseren. Ingen fil lastes opp til en server. Internett er nødvendig for å laste PDF-bibliotekene. Sjekk priser, produsentlogoer og strekkoder før utskrift.</p>
 </main>
-<footer class="site-foot"><span>Papirfly to produkter på en • Et uavhengig hjelpeverktøy</span><span>Ikke en offisiell Papirfly- eller MAXBO-tjeneste.</span></footer>
+<footer class="site-foot"><span>DuoTag • Et uavhengig verktøy for prisplakater</span><span>Ikke en offisiell Papirfly- eller MAXBO-tjeneste.</span></footer>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
@@ -400,7 +400,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
         const generated=await PDFLib.PDFDocument.create();
         const font=await generated.embedFont(PDFLib.StandardFonts.Helvetica);
         const bold=await generated.embedFont(PDFLib.StandardFonts.HelveticaBold);
-        generated.setTitle('Papirfly to produkter på en - '+heading.value.trim());
+        generated.setTitle('DuoTag - '+heading.value.trim());
         let pdfjsDoc=null;
         if(mode.value==='papirfly' && !window.pdfjsLib)throw new Error('PDF.js ble ikke lastet. Sjekk internettforbindelsen.');
         if(window.pdfjsLib && mode.value==='papirfly'){
