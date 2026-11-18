@@ -67,6 +67,18 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
 .setting-row input[type=range]{accent-color:var(--blue);max-width:145px}
 #priceXValue{font-size:11px;color:var(--muted);min-width:95px;text-align:right}
 #optionsNote{font-size:12px;color:var(--muted);margin-top:12px}
+.experimental{margin-top:15px;border:1px solid #b6d0e7;background:#f0f7fc;border-radius:10px;overflow:hidden}
+.experimental>summary{display:flex;align-items:center;gap:8px;padding:12px 13px;color:#174d71;font-size:13px;font-weight:790}
+.experimental>summary::after{content:'+';margin-left:auto;font-size:18px;color:#375f7c}
+.experimental[open]>summary::after{content:'−'}
+.beta-tag{font-size:10px;font-weight:850;letter-spacing:.06em;border:1px solid #b7d4e8;background:white;color:#1d628c;border-radius:50px;padding:2px 7px}
+.experimental-body{padding:3px 13px 14px;border-top:1px solid #d5e4ef}
+.experimental-body>p{font-size:12px;color:#567288;margin:10px 0 14px;line-height:1.5}
+.experimental .settings-grid{margin-bottom:14px}
+.experimental .setting-row{margin:10px 0}
+.experimental .field-group{margin:13px 0 0}
+.experimental .field-group input{font-size:12px;padding:9px}
+.experimental select{width:164px;max-width:100%}
 #resetSettings{border:1px solid #cfdee9;background:white;color:#245272;border-radius:8px;padding:8px 11px;font-weight:700;cursor:pointer;font-size:12px;margin-top:12px}
 .generate-area{border-top:1px solid #e3ebf0;margin-top:21px;padding-top:19px}
 #generate{display:flex;align-items:center;justify-content:center;width:100%;border:0;background:var(--navy);color:white;border-radius:11px;font-weight:800;padding:14px;cursor:pointer;min-height:49px;transition:background .15s,transform .15s}
@@ -142,6 +154,26 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
             <div class="setting-row"><label for="priceX">Prisplassering</label><input type="range" id="priceX" min="-25" max="60" step="5" value="0"><output id="priceXValue">Standard</output></div>
             <div class="setting-row"><label for="a5SpecScale">A5 spesifikasjonstekst</label><select id="a5SpecScale"><option value="1">Standard</option><option value="1.15">Litt større</option><option value="1.3">Større</option></select></div>
           </fieldset>
+          <details id="experimentalSettings" class="experimental">
+            <summary><span>Eksperimentelle innstillinger <span class="beta-tag">BETA</span></span></summary>
+            <div class="experimental-body">
+              <p>Prøv nye oppsett uten å endre original-PDF-en. Alt er av eller satt til standard til du velger noe.</p>
+              <div class="settings-grid">
+                <label><input type="checkbox" id="expSwap"> Bytt øverste og nederste produkt</label>
+                <label><input type="checkbox" id="expFlat"> Flatt toppbanner uten bølge</label>
+                <label><input type="checkbox" id="expCropMarks"> Kuttmerker i hjørnene</label>
+              </div>
+              <div class="setting-row"><label for="expAccent">Farge på banner og overskrifter</label>
+                <select id="expAccent"><option value="standard">Klassisk blå</option><option value="graphite">Mørk grafitt</option><option value="forest">Skoggrønn</option><option value="burgundy">Burgunder</option></select>
+              </div>
+              <div class="setting-row"><label for="expWatermark">Testvannmerke</label>
+                <select id="expWatermark"><option value="none">Ingen</option><option value="draft">UTKAST</option><option value="test">TEST</option></select>
+              </div>
+              <div class="field-group"><label class="field-label" for="expFooter">Egen bunntekst (valgfritt)</label>
+                <input type="text" id="expFooter" maxlength="90" placeholder="F.eks. Kampanje gjelder så langt lageret rekker">
+              </div>
+            </div>
+          </details>
           <button type="button" id="resetSettings">Tilbakestill innstillinger</button>
           <p id="optionsNote">Innstillingene gjelder standard produktplakatmodus. Kontroller priser og strekkoder før utskrift.</p>
         </div>
@@ -172,12 +204,18 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
     $('resetSettings').addEventListener('click',()=>{
       toggles.forEach(id=>$(id).checked=true);
       $('priceX').value='0'; $('a5SpecScale').value='1'; $('priceXValue').textContent='Standard';
+      ['expSwap','expFlat','expCropMarks'].forEach(id=>$(id).checked=false);
+      $('expAccent').value='standard'; $('expWatermark').value='none'; $('expFooter').value='';
     });
 
     let selectedFile=null, downloadUrl=null, busy=false;
     const W=841.89, H=1190.55; // Intern A3-designflate (PDF-punkter)
     const PAPER={A3:[841.89,1190.55],A4:[595.28,841.89],A5:[419.53,595.28]};
     function textBoost(){return paper.value==='A5'?1.7:paper.value==='A4'?1.1:1;}
+    function accentColor(){
+      const colors={standard:'#0e3553',graphite:'#273443',forest:'#205d4d',burgundy:'#742c46'};
+      return rgbHex(colors[$('expAccent').value]||colors.standard);
+    }
 
     function message(text,type='') { status.className='status '+type; status.textContent=text; }
     function fileChosen(file) {
@@ -293,8 +331,8 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
       lines.slice(0,maxLines).forEach((l,i)=>page.drawText(l,{x,y:H-top-i*(size+5)-size,size,font,color}));
       return Math.min(lines.length,maxLines);
     }
-    async function drawProduct(pdfDoc,outPage,sourcePage,index,rowTop,font,bold,pdfjsDoc){
-      const navy=rgbHex('#0e3553'),gray=rgbHex('#d2dce2'),muted=rgbHex('#6b7580');
+    async function drawProduct(pdfDoc,outPage,sourcePage,index,rowTop,font,bold,pdfjsDoc,slot=index%2){
+      const navy=accentColor(),gray=rgbHex('#d2dce2'),muted=rgbHex('#6b7580');
       const title=(await headingForPage(pdfjsDoc,index)).replace(/\s+/g,' ').slice(0,55);
       let size=29*textBoost();while(size>16&&bold.widthOfTextAtSize(title,size)>510)size--;
       if(enabled('showCategory'))outPage.drawText(title,{x:50,y:H-rowTop-size,size,font:bold,color:navy});
@@ -342,30 +380,39 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
       }
       const itemNumber=await itemNumberForPage(pdfjsDoc,index);
       if(itemNumber&&enabled('showItemNumber')){outPage.drawText('Varenr. '+itemNumber,{x:625,y:H-rowTop-418,size:12.5*textBoost(),font,color:muted});}
-      if(index%2===0&&enabled('showDivider')){line(outPage,45,648, W-90,gray,1.5);}
+      if(slot===0&&enabled('showDivider')){line(outPage,45,648, W-90,gray,1.5);}
     }
-    async function drawWholePage(pdfDoc,outPage,sourcePage,index,rowTop,font,bold){
-      const navy=rgbHex('#0e3553'),gray=rgbHex('#d2dce2');
+    async function drawWholePage(pdfDoc,outPage,sourcePage,index,rowTop,font,bold,slot=index%2){
+      const navy=accentColor(),gray=rgbHex('#d2dce2');
       outPage.drawText('PRODUKT '+(index+1),{x:50,y:H-rowTop-25,size:23*textBoost(),font:bold,color:navy});
       const w=sourcePage.getWidth(),h=sourcePage.getHeight();
       const maxW=750,maxH=362,scale=Math.min(maxW/w,maxH/h);
       const dw=w*scale,dh=h*scale,x=(W-dw)/2,ytop=rowTop+40+(maxH-dh)/2;
       const [embedded]=await pdfDoc.embedPages([sourcePage]);
       outPage.drawPage(embedded,{x,y:H-ytop-dh,width:dw,height:dh});
-      if(index%2===0&&enabled('showDivider'))line(outPage,45,648,W-90,gray,1.5);
+      if(slot===0&&enabled('showDivider'))line(outPage,45,648,W-90,gray,1.5);
     }
     async function addSheet(pdfDoc,sourceDoc,pairOffset,font,bold,pdfjsDoc){
       const sheet=pdfDoc.addPage([W,H]);
-      const navy=rgbHex('#0e3553'),cream=rgbHex('#ffffff'),gray=rgbHex('#d7e0e5');
+      const navy=accentColor(),cream=rgbHex('#ffffff'),gray=rgbHex('#d7e0e5');
       // Felles blå Maxbo-lignende banner med buet hvit kant.
       rect(sheet,0,0,W,188,navy);
-      sheet.drawEllipse({x:W/2,y:H-280,xScale:W*.74,yScale:120,color:cream});
+      if(!enabled('expFlat'))sheet.drawEllipse({x:W/2,y:H-280,xScale:W*.74,yScale:120,color:cream});
       fitText(sheet,heading.value.trim()||'PRISPLAKAT',bold,40,60*textBoost(),21,W-80,cream);
       const count=Math.min(2,sourceDoc.getPageCount()-pairOffset);
       for(let k=0;k<count;k++){
-        const index=pairOffset+k,sourcePage=sourceDoc.getPage(index),top=k===0?205:659;
-        if(mode.value==='papirfly')await drawProduct(pdfDoc,sheet,sourcePage,index,top,font,bold,pdfjsDoc);
-        else await drawWholePage(pdfDoc,sheet,sourcePage,index,top,font,bold);
+        const index=pairOffset+(enabled('expSwap')&&count===2?1-k:k);
+        const sourcePage=sourceDoc.getPage(index),top=k===0?205:659;
+        if(mode.value==='papirfly')await drawProduct(pdfDoc,sheet,sourcePage,index,top,font,bold,pdfjsDoc,k);
+        else await drawWholePage(pdfDoc,sheet,sourcePage,index,top,font,bold,k);
+      }
+      const testMark=$('expWatermark').value;
+      if(testMark!=='none'){
+        const label=testMark==='draft'?'UTKAST':'TEST';
+        const watermarkColor=rgbHex('#667a89');
+        for(let row=0;row<count;row++){
+          sheet.drawText(label,{x:248,y:H-(row===0?457:913),size:73,font:bold,color:watermarkColor,rotate:PDFLib.degrees(-20),opacity:0.12});
+        }
       }
       // MAXBO-logoen nederst pa arket; produsentlogoen tegnes separat i produktrekken.
       // Hent logo fra originaldokumentet, uten aa endre originalens grafikk.
@@ -380,6 +427,23 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
         }
       }else{
         line(sheet,45,1130,W-90,gray,1);
+      }
+      // Eksperimentell bunntekst og kuttmerker - ingen endring uten aktivert valg.
+      const extraFooter=pdfSafe($('expFooter').value.trim()).slice(0,90);
+      if(extraFooter){
+        let fs=16*textBoost();
+        while(fs>10&&font.widthOfTextAtSize(extraFooter,fs)>520)fs-=0.5;
+        sheet.drawText(extraFooter,{x:46,y:H-1170,size:fs,font,color:rgbHex('#425a6e')});
+      }
+      if(enabled('expCropMarks')){
+        const ink=rgbHex('#8f9faa'),m=16,l=19,t=1;
+        for(const x of [m,W-m]){
+          for(const top of [m,H-m]){
+            const left=x<W/2,upper=top<H/2;
+            rect(sheet,left?x:x-l,top,l,t,ink);
+            rect(sheet,x,upper?top:top-l,t,l,ink);
+          }
+        }
       }
       // Bruk samme oppsett, men skaler hele siden til valgt fysisk papirstørrelse.
       const [pageW,pageH]=PAPER[paper.value];
