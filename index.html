@@ -324,7 +324,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
     async function drawManufacturerLogo(sourcePage,outputDoc,outputPage,rowTop){
       const src=await getRaster(sourcePage);
       const x0=Math.floor(src.width*0.028),x1=Math.ceil(src.width*0.285);
-      const y0=Math.floor(src.height*0.425),y1=Math.floor(src.height*0.506);
+      const y0=Math.floor(src.height*0.425),y1=Math.floor(src.height*0.511);
       const width=x1-x0,height=y1-y0;
       if(width<2||height<2)return;
       const original=src.canvas.getContext('2d',{willReadFrequently:true});
