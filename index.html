@@ -342,7 +342,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
         const name=a5Details.name||title;
         // Behold ORIGINAL produsent-/merkevarelogo fra Papirfly (f.eks. ADAX).
         // Denne er ikke det samme som MAXBO-logoen nederst på arket.
-        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.457,.180,.505],[50,rowTop+50,145,35]);
+        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.038,.482,.232,.512],[50,rowTop+50,170,40]);
         const used=enabled('showName')?drawWrapped(outPage,name,bold,24,50,rowTop+91,490,2,navy):1;
         const specsTop=rowTop+148+(used-1)*27;
         const maxSpecs=Math.min(5,Math.floor((rowTop+270-specsTop)/26));
@@ -356,7 +356,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
         // A3/A4 og PDF-er uten lesbart tekstlag: behold originaltekstblokken.
         // Del opp originalteksten i smale, presise felt. Ikke kopier den
         // brede sonen som inneholder dekorative symboler/streker mellom logo og navn.
-        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.457,.180,.505],[50,rowTop+50,145,35]);
+        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.038,.482,.232,.512],[50,rowTop+50,170,40]);
         if(enabled('showName'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.505,.875,.555],[50,rowTop+91,506,49], 'contain', 'left');
         if(enabled('showSpecs'))await cropTo(sourcePage,pdfDoc,outPage,[.040,.553,.79,.624],[50,rowTop+143,506,80], 'contain', 'left');
       }
