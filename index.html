@@ -67,6 +67,9 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
 .setting-row input[type=range]{accent-color:var(--blue);max-width:145px}
 #priceXValue{font-size:11px;color:var(--muted);min-width:95px;text-align:right}
 #optionsNote{font-size:12px;color:var(--muted);margin-top:12px}
+.brand-adjust{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;width:100%;margin-top:6px}
+.brand-adjust input[type=range]{width:100%;accent-color:var(--blue)}
+.brand-adjust output{font-size:12px;min-width:82px;text-align:right;color:#244e70;font-weight:750}
 .experimental{margin-top:15px;border:1px solid #b6d0e7;background:#f0f7fc;border-radius:10px;overflow:hidden}
 .experimental>summary{display:flex;align-items:center;gap:8px;padding:12px 13px;color:#174d71;font-size:13px;font-weight:790}
 .experimental>summary::after{content:'+';margin-left:auto;font-size:18px;color:#375f7c}
@@ -153,6 +156,14 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
           <fieldset><legend>Finjustering</legend>
             <div class="setting-row"><label for="priceX">Prisplassering</label><input type="range" id="priceX" min="-25" max="60" step="5" value="0"><output id="priceXValue">Standard</output></div>
             <div class="setting-row"><label for="a5SpecScale">A5 spesifikasjonstekst</label><select id="a5SpecScale"><option value="1">Standard</option><option value="1.15">Litt større</option><option value="1.3">Større</option></select></div>
+            <div class="field-group" style="margin-top:14px;margin-bottom:0">
+              <label class="field-label" for="brandY">Flytt produsentlogo opp / ned</label>
+              <div class="brand-adjust">
+                <input type="range" id="brandY" min="-20" max="20" step="1" value="0">
+                <output id="brandYValue">Standard</output>
+              </div>
+              <p class="field-desc">Logoen hentes nå automatisk fra PDF-en. Justeringen endrer bare plasseringen.</p>
+            </div>
           </fieldset>
           <details id="experimentalSettings" class="experimental">
             <summary><span>Eksperimentelle innstillinger <span class="beta-tag">BETA</span></span></summary>
@@ -200,10 +211,13 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
     const toggles=['showCategory','showBrand','showName','showSpecs','showPhoto','showUnit','showBarcode','showItemNumber','showMaxbo','showDivider'];
     const enabled=id=>$(id).checked;
     const priceOffset=()=>Number($('priceX').value)||0;
+    const brandOffset=()=>Number($('brandY').value)||0;
     $('priceX').addEventListener('input',()=>{$('priceXValue').textContent=priceOffset()===0?'Standard':(priceOffset()>0?'+':'')+priceOffset()+' pt mot høyre';});
+    $('brandY').addEventListener('input',()=>{$('brandYValue').textContent=brandOffset()===0?'Standard':(brandOffset()>0?'+':'')+brandOffset()+' pt';});
     $('resetSettings').addEventListener('click',()=>{
       toggles.forEach(id=>$(id).checked=true);
       $('priceX').value='0'; $('a5SpecScale').value='1'; $('priceXValue').textContent='Standard';
+      $('brandY').value='0'; $('brandYValue').textContent='Standard';
       ['expSwap','expFlat','expCropMarks'].forEach(id=>$(id).checked=false);
       $('expAccent').value='standard'; $('expWatermark').value='none'; $('expFooter').value='';
     });
@@ -304,6 +318,46 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
       outputPage.drawImage(img,{x,y:H-ytop-dh,width:dw,height:dh});
       piece.width=0;piece.height=0;
     }
+    // Finn hele produsentlogoen i original-PDF-en. Et fast kildeutsnitt
+    // kan kutte toppen av ordmerker som Granberg eller Blatind.
+    // Logoen er i venstre kolonne over produktnavnet.
+    async function drawManufacturerLogo(sourcePage,outputDoc,outputPage,rowTop){
+      const src=await getRaster(sourcePage);
+      const x0=Math.floor(src.width*0.028),x1=Math.ceil(src.width*0.285);
+      const y0=Math.floor(src.height*0.425),y1=Math.floor(src.height*0.506);
+      const width=x1-x0,height=y1-y0;
+      if(width<2||height<2)return;
+      const original=src.canvas.getContext('2d',{willReadFrequently:true});
+      const pixels=original.getImageData(x0,y0,width,height).data;
+      let left=width,top=height,right=-1,bottom=-1,painted=0;
+      for(let y=0;y<height;y++){
+        for(let x=0;x<width;x++){
+          const i=(y*width+x)*4;
+          if(Math.min(pixels[i],pixels[i+1],pixels[i+2])>=232)continue;
+          painted++;
+          if(x<left)left=x;if(x>right)right=x;
+          if(y<top)top=y;if(y>bottom)bottom=y;
+        }
+      }
+      if(painted<20)return;
+      const pad=Math.max(4,Math.round(src.width*.002));
+      left=Math.max(0,left-pad);top=Math.max(0,top-pad);
+      right=Math.min(width,right+pad+1);bottom=Math.min(height,bottom+pad+1);
+      const px=x0+left,py=y0+top,pw=right-left,ph=bottom-top;
+      if(pw<=0||ph<=0)return;
+      const crop=document.createElement('canvas');
+      crop.width=pw;crop.height=ph;
+      const context=crop.getContext('2d',{alpha:false});
+      context.fillStyle='#ffffff';context.fillRect(0,0,pw,ph);
+      context.drawImage(src.canvas,px,py,pw,ph,0,0,pw,ph);
+      const img=await outputDoc.embedPng(crop.toDataURL('image/png'));
+      const fit=Math.min(190/img.width,38/img.height);
+      const dw=img.width*fit,dh=img.height*fit;
+      const destTop=rowTop+50+brandOffset()+(38-dh)/2;
+      outputPage.drawImage(img,{x:50,y:H-destTop-dh,width:dw,height:dh});
+      crop.width=0;crop.height=0;
+    }
+
     // A5: hent spesifikasjonene som ekte tekst, i stedet for aa krympe original-PDF-en.
     async function detailsForA5(pdfjsDoc,index){
       if(!pdfjsDoc)return null;
@@ -342,7 +396,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
         const name=a5Details.name||title;
         // Behold ORIGINAL produsent-/merkevarelogo fra Papirfly (f.eks. ADAX).
         // Denne er ikke det samme som MAXBO-logoen nederst på arket.
-        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.038,.482,.232,.512],[50,rowTop+50,170,40]);
+        if(enabled('showBrand'))await drawManufacturerLogo(sourcePage,pdfDoc,outPage,rowTop);
         const used=enabled('showName')?drawWrapped(outPage,name,bold,24,50,rowTop+91,490,2,navy):1;
         const specsTop=rowTop+148+(used-1)*27;
         const maxSpecs=Math.min(5,Math.floor((rowTop+270-specsTop)/26));
@@ -356,7 +410,7 @@ legend{font-size:13px;font-weight:790;color:#1b4765;padding:0;margin-bottom:9px}
         // A3/A4 og PDF-er uten lesbart tekstlag: behold originaltekstblokken.
         // Del opp originalteksten i smale, presise felt. Ikke kopier den
         // brede sonen som inneholder dekorative symboler/streker mellom logo og navn.
-        if(enabled('showBrand'))await cropTo(sourcePage,pdfDoc,outPage,[.038,.482,.232,.512],[50,rowTop+50,170,40]);
+        if(enabled('showBrand'))await drawManufacturerLogo(sourcePage,pdfDoc,outPage,rowTop);
         if(enabled('showName'))await cropTo(sourcePage,pdfDoc,outPage,[.035,.505,.875,.555],[50,rowTop+91,506,49], 'contain', 'left');
         if(enabled('showSpecs'))await cropTo(sourcePage,pdfDoc,outPage,[.040,.553,.79,.624],[50,rowTop+143,506,80], 'contain', 'left');
       }
